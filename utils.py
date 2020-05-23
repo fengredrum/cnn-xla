@@ -223,36 +223,41 @@ def train_loop_fn(loader, net, optimizer, loss_fn, batch_size, log_steps):
                 flush=True)
 
 
-def train_model_xla(FLAGS, net):
+def train_model_xla(net,
+                    batch_size,
+                    lr,
+                    num_epochs,
+                    log_steps=20,
+                    metrics_debug=False):
     torch.manual_seed(1)
 
-    train_loader, test_loader = load_cifar_10_xla(FLAGS['batch_size'])
+    train_loader, test_loader = load_cifar_10_xla(batch_size)
 
     # Scale learning rate to num cores
-    learning_rate = FLAGS['learning_rate'] * xm.xrt_world_size()
+    lr = lr * xm.xrt_world_size()
 
     # Get loss function, optimizer, and model
     device = xm.xla_device()
     net = net.to(device)
     optimizer = optim.SGD(net.parameters(),
-                          lr=learning_rate,
-                          momentum=FLAGS['momentum'],
+                          lr=lr,
+                          momentum=0.9,
                           weight_decay=5e-4)
     loss_fn = nn.CrossEntropyLoss()
 
     # Train and eval loops
     accuracy = 0.0
     data, pred, target = None, None, None
-    for epoch in range(1, FLAGS['num_epochs'] + 1):
+    for epoch in range(1, num_epochs + 1):
         para_loader = pl.ParallelLoader(train_loader, [device])
         train_loop_fn(para_loader.per_device_loader(device), net, optimizer,
-                      loss_fn, FLAGS['batch_size'], FLAGS['log_steps'])
+                      loss_fn, batch_size, log_steps)
         xm.master_print("Finished training epoch {}".format(epoch))
 
         para_loader = pl.ParallelLoader(test_loader, [device])
         accuracy, data, pred, target = test_loop_fn(
             para_loader.per_device_loader(device), net)
-        if FLAGS['metrics_debug']:
+        if metrics_debug:
             xm.master_print(met.metrics_report(), flush=True)
 
     return accuracy, data, pred, target
