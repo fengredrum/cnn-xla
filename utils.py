@@ -226,7 +226,7 @@ def train_loop_fn(loader, net, optimizer, loss_fn, batch_size, log_steps):
 def train_model_xla(FLAGS, net):
     torch.manual_seed(1)
 
-    train_loader, test_loader = load_cifar_10_xla()
+    train_loader, test_loader = load_cifar_10_xla(FLAGS['batch_size'])
 
     # Scale learning rate to num cores
     learning_rate = FLAGS['learning_rate'] * xm.xrt_world_size()
