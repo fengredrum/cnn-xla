@@ -57,7 +57,7 @@ def train_model(net,
                 comment='DenseNet_C10'):
     writer = SummaryWriter(comment=comment)
     net = net.to(device)
-    loss_func = nn.CrossEntropyLoss()
+    loss_fn = nn.CrossEntropyLoss()
     print("training on ", device)
 
     for epoch in range(num_epochs):
@@ -69,7 +69,7 @@ def train_model(net,
             x = x.to(device)
             y = y.to(device)
             out = net(x)
-            loss = loss_func(out, y)
+            loss = loss_fn(out, y)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -92,7 +92,7 @@ def train_model(net,
         writer.add_scalar('test acc', test_acc, epoch + 1)
 
 
-def load_data_cifar_10(batch_size, resize=None, root='/tmp/CIFAR10'):
+def load_data_cifar_10(batch_size, resize=None, root='/tmp/cifar10'):
     """Download and load the CIFAR-10 dataset."""
     norm = transforms.Normalize(mean=(0.4914, 0.4822, 0.4465),
                                 std=(0.2023, 0.1994, 0.2010))
