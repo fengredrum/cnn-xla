@@ -7,9 +7,20 @@ import torch.nn.functional as F
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 # PyTorch/XLA
-import torch_xla.core.xla_model as xm
-import torch_xla.debug.metrics as met
-import torch_xla.distributed.parallel_loader as pl
+try:
+    import torch_xla.core.xla_model as xm
+except ImportError:
+    pass
+
+try:
+    import torch_xla.debug.metrics as met
+except ImportError:
+    pass
+
+try:
+    import torch_xla.distributed.parallel_loader as pl
+except ImportError:
+    pass
 
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
