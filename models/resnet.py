@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from activations import Swish, Mish
+from . import Swish, Mish
 
 
 class ResidualBlock(nn.Module):
@@ -115,9 +115,13 @@ class ResNet(nn.Module):
         return out
 
 
+def resnet18(num_blocks, activation='relu'):
+    return ResNet(ResidualBlock, [2, 2, 2, 2], activation=activation)
+
+
 if __name__ == "__main__":
     x = torch.zeros(1, 3, 32, 32)
-    net = ResNet(ResidualBlock, [2, 2, 2, 2], activation='mish')
+    net = resnet18([2, 2, 2, 2], activation='mish')
 
     out = net(x)
     print(out.shape)

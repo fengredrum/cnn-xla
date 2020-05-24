@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from activations import Swish, Mish
+from . import Swish, Mish
 
 
 class AlexNet(nn.Module):
@@ -44,9 +44,13 @@ class AlexNet(nn.Module):
         return out
 
 
+def alexnet(activation='relu', num_classes=10):
+    return AlexNet(activation, num_classes)
+
+
 if __name__ == "__main__":
     data = torch.zeros(1, 3, 32, 32)
-    net = AlexNet(activation='mish')
+    net = alexnet(activation='mish')
 
     out = net(data)
     print(out.shape)

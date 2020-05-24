@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from activations import Swish, Mish
+from . import Swish, Mish
 
 
 class DenseBlock(nn.Module):
@@ -147,11 +147,16 @@ class DenseNet(nn.Module):
         return out
 
 
+def densenet18(num_convs, activation='relu', num_classes=10):
+    return DenseNet(DenseBlock,
+                    TransitionBlock,
+                    num_convs,
+                    activation=activation)
+
+
 if __name__ == "__main__":
     data = torch.zeros(1, 3, 32, 32)
-    net = DenseNet(DenseBlock,
-                   TransitionBlock, [4, 4, 4, 4],
-                   activation='mish')
+    net = densenet18([4, 4, 4, 4], activation='mish')
 
     out = net(data)
     print(out.shape)
