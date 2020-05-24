@@ -3,7 +3,6 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
@@ -26,27 +25,6 @@ except ImportError:
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
-
-# ---------------------- Activations ---------------------- #
-
-
-class Mish(nn.Module):
-    def __init__(self):
-        super(Mish, self).__init__()
-
-    def forward(self, x):
-        x = x * (torch.tanh(F.softplus(x)))
-        return x
-
-
-class Swish(nn.Module):
-    def __init__(self):
-        super(Swish, self).__init__()
-
-    def forward(self, x):
-        x = x * torch.sigmoid(x)
-        return x
-
 
 # ---------------------- Functions for GPU Training ---------------------- #
 
