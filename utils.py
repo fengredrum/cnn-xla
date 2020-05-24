@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
+
 # PyTorch/XLA
 try:
     import torch_xla.core.xla_model as xm
