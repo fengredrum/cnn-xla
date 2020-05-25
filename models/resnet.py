@@ -115,13 +115,15 @@ class ResNet(nn.Module):
         return out
 
 
-def resnet18(num_blocks, activation='relu'):
-    return ResNet(ResidualBlock, [2, 2, 2, 2], activation=activation)
+def resnet18(activation='relu', num_classes=10):
+    return ResNet(ResidualBlock, [2, 2, 2, 2],
+                  activation=activation,
+                  num_classes=num_classes)
 
 
 if __name__ == "__main__":
     x = torch.zeros(1, 3, 32, 32)
-    net = resnet18([2, 2, 2, 2], activation='mish')
+    net = resnet18(activation='mish')
 
     out = net(x)
     print(out.shape)

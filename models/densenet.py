@@ -147,16 +147,16 @@ class DenseNet(nn.Module):
         return out
 
 
-def densenet18(num_convs, activation='relu', num_classes=10):
+def densenet18(activation='relu', num_classes=10):
     return DenseNet(DenseBlock,
-                    TransitionBlock,
-                    num_convs,
-                    activation=activation)
+                    TransitionBlock, [4, 4, 4, 4],
+                    activation=activation,
+                    num_classes=num_classes)
 
 
 if __name__ == "__main__":
     data = torch.zeros(1, 3, 32, 32)
-    net = densenet18([4, 4, 4, 4], activation='mish')
+    net = densenet18(activation='mish')
 
     out = net(data)
     print(out.shape)
