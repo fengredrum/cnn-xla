@@ -12,7 +12,7 @@ A collection of CNN models are trained on Cloud TPU by using PyTorch/XLA
 # CNN Models
 
 * [AlexNet](models/alexnet.py)
-* VGG
+* [VGG](models/vgg.py)
 * Inception
 * [ResNet](models/resnet.py)
 * [DenseNet](models/densenet.py)
