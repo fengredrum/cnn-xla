@@ -42,7 +42,7 @@ class VGG(nn.Module):
     def __init__(self,
                  conv_arch,
                  image_size=224,
-                 num_hiddens=4096,
+                 num_hiddens=512,
                  activation='relu',
                  num_classes=10):
         super(VGG, self).__init__()
@@ -64,17 +64,15 @@ class VGG(nn.Module):
                 VGGBlock(num_convs, in_channels, out_channels, activation))
 
         feature_size = self._get_feature_size(self.conv)
-        print('feature: ', feature_size)
         self.linear = nn.Sequential(
-            nn.Linear(512 * np.prod(feature_size), num_hiddens),
-            self.activation, nn.Dropout(0.5),
-            nn.Linear(num_hiddens, num_hiddens), self.activation,
-            nn.Dropout(0.5), nn.Linear(num_hiddens, 10))
+            nn.Linear(np.prod(feature_size), num_hiddens), self.activation,
+            nn.Dropout(0.5), nn.Linear(num_hiddens, num_hiddens),
+            self.activation, nn.Dropout(0.5), nn.Linear(num_hiddens, 10))
 
     def _get_feature_size(self, net):
         x = torch.zeros(1, 3, self.image_size, self.image_size)
         out = net(x)
-        return out.size()[2:]
+        return out.size()[1:]
 
     def forward(self, x):
         out = self.conv(x)
@@ -82,12 +80,22 @@ class VGG(nn.Module):
         return self.linear(out)
 
 
+def vgg11(image_size=32, ratio=8, activation='relu', num_classes=10):
+    conv_arch = ((1, 3, 64 // ratio), (1, 64 // ratio, 128 // ratio),
+                 (2, 128 // ratio, 256 // ratio),
+                 (2, 256 // ratio, 512 // ratio), (2, 512 // ratio,
+                                                   512 // ratio))
+    net = VGG(conv_arch,
+              image_size,
+              activation=activation,
+              num_classes=num_classes)
+    return net
+
+
 if __name__ == "__main__":
-    conv_arch = ((1, 3, 64), (1, 64, 128), (2, 128, 256), (2, 256, 512),
-                 (2, 512, 512))
 
     image_size = 32
     x = torch.zeros(1, 3, image_size, image_size)
-    net = VGG(conv_arch, image_size)
+    net = vgg11(image_size, activation='mish')
     out = net(x)
     print(out.shape)
