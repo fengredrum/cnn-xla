@@ -42,7 +42,7 @@ class VGG(nn.Module):
     def __init__(self,
                  conv_arch,
                  image_size=224,
-                 num_hiddens=512,
+                 num_hiddens=4096,
                  activation='relu',
                  num_classes=10):
         super(VGG, self).__init__()
@@ -85,17 +85,23 @@ def vgg11(image_size=32, ratio=8, activation='relu', num_classes=10):
                  (2, 128 // ratio, 256 // ratio),
                  (2, 256 // ratio, 512 // ratio), (2, 512 // ratio,
                                                    512 // ratio))
+    num_hiddens = 4096 // ratio
     net = VGG(conv_arch,
               image_size,
+              num_hiddens,
               activation=activation,
               num_classes=num_classes)
     return net
 
 
 if __name__ == "__main__":
+    from ptflops import get_model_complexity_info
 
     image_size = 32
-    x = torch.zeros(1, 3, image_size, image_size)
-    net = vgg11(image_size, activation='mish')
-    out = net(x)
-    print(out.shape)
+    net = vgg11(activation='relu', ratio=1, image_size=image_size)
+    macs, params = get_model_complexity_info(net, (3, image_size, image_size),
+                                             as_strings=True,
+                                             print_per_layer_stat=True,
+                                             verbose=True)
+    print('{:<30}  {:<8}'.format('Number of parameters: ', params))
+    print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
