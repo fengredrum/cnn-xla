@@ -11,10 +11,15 @@ A collection of CNN models are trained on Cloud TPU by using PyTorch/XLA
 
 # CNN Models
 
+| Model              | Params(M)          | MACs(G)            | Percentage Correct |
+| ------------------ | ------------------ | ------------------ | ------------------ |
+| [AlexNet](models/alexnet.py) | 46.76 | 0.91 | - |
+
 * [AlexNet](models/alexnet.py)
 * [VGG](models/vgg.py)
 * Inception
 * [ResNet](models/resnet.py)
+* [SE-ResNet](models/se-resnet.py)
 * [DenseNet](models/densenet.py)
 
 # Related Repositories
