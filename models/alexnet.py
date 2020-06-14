@@ -1,3 +1,8 @@
+'''
+A PyTorch implementation of AlexNet.
+The original paper can be found at http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf.
+'''
+
 import torch
 import torch.nn as nn
 

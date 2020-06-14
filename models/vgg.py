@@ -1,3 +1,8 @@
+'''
+A PyTorch implementation of VGGNet.
+The original paper can be found at https://arxiv.org/abs/1409.1556.
+'''
+
 import torch
 import torch.nn as nn
 import numpy as np
