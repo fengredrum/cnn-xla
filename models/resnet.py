@@ -7,21 +7,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .activations import Swish, Mish
+from .activations import activetion_func
 
 
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1, activation='relu'):
         super(ResidualBlock, self).__init__()
-
-        if activation == 'relu':
-            self.activation = nn.ReLU()
-        elif activation == 'mish':
-            self.activation = Mish()
-        elif activation == 'swish':
-            self.activation = Swish()
-        else:
-            raise NotImplementedError
+        self.activation = activetion_func(activation)
 
         self.trunk = nn.Sequential(
             nn.Conv2d(in_channels,
@@ -64,15 +56,7 @@ class ResNet(nn.Module):
                  num_classes=10):
         super(ResNet, self).__init__()
         assert len(num_blocks) == 4, 'Invalid Conv Number!'
-
-        if activation == 'relu':
-            self.activation = nn.ReLU()
-        elif activation == 'mish':
-            self.activation = Mish()
-        elif activation == 'swish':
-            self.activation = Swish()
-        else:
-            raise NotImplementedError
+        self.activation = activetion_func(activation)
 
         self.num_channels = 64
         self.conv1 = nn.Conv2d(3,

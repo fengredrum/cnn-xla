@@ -6,7 +6,7 @@ The original paper can be found at https://arxiv.org/abs/1409.1556.
 import torch
 import torch.nn as nn
 import numpy as np
-from .activations import Swish, Mish
+from .activations import activetion_func
 
 
 class VGGBlock(nn.Module):
@@ -16,15 +16,7 @@ class VGGBlock(nn.Module):
                  out_channels,
                  activation='relu'):
         super(VGGBlock, self).__init__()
-
-        if activation == 'relu':
-            self.activation = nn.ReLU()
-        elif activation == 'mish':
-            self.activation = Mish()
-        elif activation == 'swish':
-            self.activation = Swish()
-        else:
-            raise NotImplementedError
+        self.activation = activetion_func(activation)
 
         net = [nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1)]
         net.append(self.activation)
@@ -52,15 +44,7 @@ class VGG(nn.Module):
                  num_classes=10):
         super(VGG, self).__init__()
         self.image_size = image_size
-
-        if activation == 'relu':
-            self.activation = nn.ReLU()
-        elif activation == 'mish':
-            self.activation = Mish()
-        elif activation == 'swish':
-            self.activation = Swish()
-        else:
-            raise NotImplementedError
+        self.activation = activetion_func(activation)
 
         self.conv = nn.Sequential()
         for i, (num_convs, in_channels, out_channels) in enumerate(conv_arch):
