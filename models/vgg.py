@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from . import Swish, Mish
+from .activations import Swish, Mish
 
 
 class VGGBlock(nn.Module):

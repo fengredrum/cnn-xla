@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from . import Swish, Mish
+from .activations import Swish, Mish
 
 
 class AlexNet(nn.Module):
