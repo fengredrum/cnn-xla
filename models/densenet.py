@@ -126,7 +126,7 @@ class DenseNet(nn.Module):
 
 def densenet121(activation='relu', num_classes=10):
     return DenseNet(num_blocks=[6, 12, 24, 16],
-                    growth_rate=32,
+                    growth_rate=12,
                     activation=activation,
                     num_classes=num_classes)
 

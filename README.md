@@ -17,7 +17,7 @@ A collection of CNN models are trained on Cloud TPU by using PyTorch/XLA
 | [VGG-11](models/vgg.py)        | 32x32 | 28.14 | 0.17 | - |
 | Inception                      | 32x32 | -     | -    | - |
 | [ResNet-18](models/resnet.py)  | 32x32 | 11.17 | 0.56 | - |
-| [DenseNet-121](models/densenet.py) | 32x32 | 6.69 | 0.9 | - |
+| [DenseNet-121 (k = 12)](models/densenet.py) | 32x32 | 1.0 | 0.13 | - |
 
 # Related Repositories
 
