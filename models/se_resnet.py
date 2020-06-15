@@ -1,3 +1,8 @@
+'''
+A PyTorch implementation of SE-ResNet-50.
+The original paper can be found at https://arxiv.org/abs/1709.01507.
+'''
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
