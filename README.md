@@ -18,6 +18,8 @@ A collection of CNN models are trained on Cloud TPU by using PyTorch/XLA
 | Inception                      | 32x32 | -     | -    | - |
 | [ResNet-18](models/resnet.py)  | 32x32 | 11.17 | 0.56 | - |
 | [DenseNet-121 (k = 12)](models/densenet.py) | 32x32 | 1.0 | 0.13 | - |
+| [SE-ResNet-50 (r = 16)](models/se-resnet.py) | 32x32 | 26.05 | 1.31 | - |
+
 
 # Related Repositories
 
