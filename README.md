@@ -17,8 +17,9 @@ A collection of CNN models are trained on Cloud TPU by using PyTorch/XLA. The pe
 | [VGG-11](models/vgg.py)        | 32x32 | 28.14 | 0.17 | 69.2% |
 | Inception                      | 32x32 | -     | -    | - |
 | [ResNet-18](models/resnet.py)  | 32x32 | 11.17 | 0.56 | 88.3% |
-| [DenseNet-121 (k = 12)](models/densenet.py) | 32x32 | 1.0 | 0.13 | 90.5% |
+| [DenseNet-121 (k = 12)](models/densenet.py)  | 32x32 | 1.0   | 0.13 | 90.5% |
 | [SE-ResNet-50 (r = 16)](models/se_resnet.py) | 32x32 | 26.05 | 1.31 | 91.4% |
+| [MobileNet-V1](models/mobilenet_v1.py)       | 32x32 | 3.22  | 0.05 | 85.1% |
 
 All of the above models are trained for just 20 epochs with a mini-batch size of 256, learning rate of 0.001 and standard data augmentation. Moreover, the [Mish activation function](https://arxiv.org/abs/1908.08681) is used for better performance.
 
