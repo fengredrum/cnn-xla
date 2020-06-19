@@ -3,6 +3,8 @@ A PyTorch implementation of MobileNetV1.
 The original paper can be found at https://arxiv.org/abs/1704.04861.
 '''
 
+import numpy as np
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -33,43 +35,53 @@ class DepthSepBlock(nn.Module):
 
 
 class MobileNetV1(nn.Module):
-    def __init__(self, activation='relu', num_classes=10):
+    def __init__(self,
+                 activation='relu',
+                 num_classes=10,
+                 width_multiplier=1.0):
         super(MobileNetV1, self).__init__()
         self.activation = activetion_func(activation)
-        num_channels = 32
+        self.out_channels = np.asarray([32, 64, 128, 256, 512, 1024])
+        self.out_channels = np.floor(
+            self.out_channels * width_multiplier).astype(np.int32).tolist()
+
         self.layer1 = nn.Sequential(
             nn.Conv2d(3,
-                      num_channels,
+                      self.out_channels[0],
                       kernel_size=3,
                       stride=1,
                       padding=1,
-                      bias=False), nn.BatchNorm2d(num_channels),
+                      bias=False), nn.BatchNorm2d(self.out_channels[0]),
             self.activation,
-            DepthSepBlock(num_channels,
-                          num_channels * 2,
+            DepthSepBlock(self.out_channels[0],
+                          self.out_channels[1],
                           stride=1,
                           activation=activation))
 
-        num_channels *= 2
-        self.layer2, num_channels = self._make_layers(num_channels, activation)
-        self.linear = nn.Linear(num_channels, num_classes)
+        self.layer2 = self._make_layers(activation)
+        self.linear = nn.Linear(self.out_channels[-1], num_classes)
 
-    def _make_layers(self, num_channels, activation):
+    def _make_layers(self, activation):
         net = []
-        for i in range(8):
-            if i == 5:
+        for i in range(1, len(self.out_channels) - 1):
+            if i == 3:
                 num_blocks = 5
             else:
                 num_blocks = 1
 
-            stride = (i + 1) % 2 + 1
+            layer = DepthSepBlock(self.out_channels[i],
+                                  self.out_channels[i + 1],
+                                  stride=2,
+                                  activation=activation)
+            net.append(layer)
             for _ in range(num_blocks):
-                layer = DepthSepBlock(num_channels, num_channels * stride,
-                                      stride, activation)
+                layer = DepthSepBlock(self.out_channels[i + 1],
+                                      self.out_channels[i + 1],
+                                      stride=1,
+                                      activation=activation)
                 net.append(layer)
-                num_channels *= stride
 
-        return nn.Sequential(*net), num_channels
+        return nn.Sequential(*net)
 
     def forward(self, x):
         out = self.layer1(x)
@@ -80,8 +92,10 @@ class MobileNetV1(nn.Module):
         return out
 
 
-def mobilenet_v1(activation='relu', num_classes=10):
-    return MobileNetV1(activation=activation, num_classes=num_classes)
+def mobilenet_v1(activation='relu', num_classes=10, width_multiplier=1.0):
+    return MobileNetV1(activation=activation,
+                       num_classes=num_classes,
+                       width_multiplier=width_multiplier)
 
 
 if __name__ == "__main__":
