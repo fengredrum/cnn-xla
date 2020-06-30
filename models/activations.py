@@ -6,6 +6,8 @@ import torch.nn.functional as F
 def activetion_func(activation_name):
     if activation_name == 'relu':
         activation = nn.ReLU()
+    elif activation_name == 'relu6':
+        activation = nn.ReLU6()
     elif activation_name == 'tanh':
         activation = nn.Tanh()
     elif activation_name == 'mish':
