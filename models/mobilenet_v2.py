@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from activations import activetion_func
+from .activations import activetion_func
 
 
 class InvBottleneckBlock(nn.Module):
